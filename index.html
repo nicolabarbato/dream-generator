@@ -1,0 +1,992 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>dream generator — motel studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F2EA;        /* bianco carta leggermente caldo */
+    --ink:#1A1A1A;
+    --mute: rgba(26,26,26,.45);
+    --peach:#F4C9B1;
+    --lavender:#C9C6E4;
+    --mint:#B8D4C3;
+    --accent:#E8A67B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{
+    height:100%;
+    background:var(--bg);
+    color:var(--ink);
+    overflow:hidden;
+    font-family:"JetBrains Mono",monospace;
+  }
+  body{
+    background:
+      radial-gradient(ellipse at 20% 10%, rgba(244,201,177,.28), transparent 55%),
+      radial-gradient(ellipse at 85% 85%, rgba(201,198,228,.22), transparent 55%),
+      radial-gradient(ellipse at 60% 40%, rgba(184,212,195,.14), transparent 60%),
+      var(--bg);
+  }
+  /* grana leggerissima */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;opacity:.15;mix-blend-mode:multiply;z-index:40;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+
+  canvas{position:fixed;inset:0;width:100vw;height:100vh;display:block;z-index:10}
+
+  .chrome{
+    position:fixed;inset:0;pointer-events:none;z-index:20;
+    padding:26px 30px;
+    display:flex;flex-direction:column;
+  }
+  .top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+
+  .brand{
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;letter-spacing:.24em;text-transform:lowercase;
+    color:var(--ink);
+    line-height:1.6;
+  }
+  .brand .by{color:var(--mute)}
+
+  /* descrizione fluttuante */
+  .desc{
+    position:fixed;z-index:21;pointer-events:none;
+    top: 50%; left: 8%;
+    transform: translateY(-50%);
+    max-width: 280px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:10px;letter-spacing:.16em;text-transform:lowercase;
+    color:var(--mute);
+    line-height:1.9;
+    animation: float 7s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(-50%) translateX(0); }
+    50%     { transform: translateY(calc(-50% - 6px)) translateX(3px); }
+  }
+
+  /* titolo al centro in alto */
+  .hero{
+    position:fixed;z-index:22;pointer-events:none;
+    top: 18%; left: 50%;
+    transform: translateX(-50%);
+    text-align:center;
+  }
+  .hero h1{
+    font-family:"Instrument Serif",serif;
+    font-style:italic;
+    font-weight:400;
+    font-size: clamp(48px, 7.5vw, 104px);
+    line-height:1;
+    letter-spacing:-.01em;
+    color:var(--ink);
+  }
+  .hero .dot{color:var(--accent)}
+
+  /* input liquid in basso */
+  .input-wrap{
+    position:fixed;z-index:30;
+    bottom: 48px; left: 50%;
+    transform: translateX(-50%);
+    width: min(560px, 88vw);
+    pointer-events:auto;
+  }
+  .liquid{
+    position:relative;
+    background: rgba(255,255,255,.35);
+    backdrop-filter: blur(22px) saturate(140%);
+    -webkit-backdrop-filter: blur(22px) saturate(140%);
+    border: 1px solid rgba(255,255,255,.8);
+    border-radius: 999px;
+    padding: 18px 26px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.9) inset,
+      0 -1px 0 rgba(0,0,0,.04) inset,
+      0 20px 50px -10px rgba(0,0,0,.08),
+      0 6px 20px -8px rgba(232,166,123,.25);
+    display:flex;align-items:center;gap:14px;
+    transition: all .3s ease;
+  }
+  .liquid:focus-within{
+    background: rgba(255,255,255,.5);
+    border-color: rgba(255,255,255,1);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,1) inset,
+      0 -1px 0 rgba(0,0,0,.04) inset,
+      0 24px 60px -10px rgba(0,0,0,.12),
+      0 8px 24px -8px rgba(232,166,123,.4);
+  }
+  /* micro alone liquid che pulsa */
+  .liquid::after{
+    content:"";position:absolute;inset:-1px;border-radius:999px;pointer-events:none;
+    background: linear-gradient(135deg, rgba(244,201,177,.4), transparent 40%, rgba(201,198,228,.3));
+    opacity:.6;z-index:-1;filter: blur(8px);
+  }
+
+  .liquid input{
+    flex:1;
+    background:transparent;border:0;outline:0;
+    font-family:"Instrument Serif",serif;
+    font-style:italic;
+    font-size: 20px;
+    color:var(--ink);
+    letter-spacing:-.005em;
+  }
+  .liquid input::placeholder{
+    color: rgba(26,26,26,.35);
+    font-style:italic;
+  }
+
+  .counter{
+    font-family:"JetBrains Mono",monospace;
+    font-size:9px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--mute);
+    min-width:42px;text-align:right;
+    transition: color .2s;
+  }
+  .counter.warn{color:var(--accent)}
+  .counter.full{color:#c24a1e}
+
+  .reset{
+    pointer-events:auto;cursor:pointer;
+    background:transparent;border:0;
+    font-family:"JetBrains Mono",monospace;
+    font-size:9px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--mute);
+    padding:6px 10px;border-radius:999px;
+    transition: all .2s;
+  }
+  .reset:hover{color:var(--ink);background:rgba(0,0,0,.04)}
+
+  /* hint sotto l'input */
+  .hint{
+    margin-top:14px;text-align:center;
+    font-family:"JetBrains Mono",monospace;
+    font-size:9px;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--mute);
+  }
+
+  /* lista parole riconosciute che lampeggia quando viene aggiunta */
+  .recognized{
+    position:fixed;z-index:23;pointer-events:none;
+    top: 42%; right: 8%;
+    max-width:180px;text-align:right;
+    font-family:"JetBrains Mono",monospace;
+    font-size:9px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--mute);line-height:1.9;
+  }
+  .recognized .w{
+    display:block;opacity:0;transform:translateX(6px);
+    transition: opacity .4s, transform .4s;
+  }
+  .recognized .w.show{opacity:1;transform:translateX(0)}
+  .recognized .w.fade{opacity:.35}
+
+  @media (max-width: 900px){
+    .desc{top:auto;bottom:200px;left:30px;right:30px;transform:none;max-width:none;animation:none;text-align:center}
+    .hero{top:26%}
+    .hero h1{font-size:clamp(40px,11vw,64px)}
+    .recognized{display:none}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="stage"></canvas>
+
+<div class="chrome">
+  <div class="top">
+    <div class="brand">
+      <div>dream generator</div>
+      <div class="by">by motel studio</div>
+    </div>
+    <button class="reset" id="reset">clear</button>
+  </div>
+</div>
+
+<div class="desc">
+  a text-to-dream experiment.<br/>
+  type a fragment.<br/>
+  watch it materialize in dust.
+</div>
+
+<div class="hero">
+  <h1>visualize<br/>your <em>dream<span class="dot">.</span></em></h1>
+</div>
+
+<div class="recognized" id="recognized"></div>
+
+<div class="input-wrap">
+  <div class="liquid">
+    <input id="dream" type="text" maxlength="80" placeholder="a house under the moon..." autocomplete="off" spellcheck="false"/>
+    <span class="counter" id="counter">00 / 80</span>
+  </div>
+  <div class="hint">try: moon · tree · house · bird · cloud · fish · star · sea · fire · eye</div>
+</div>
+
+<script>
+/* =============================================================
+   dream generator — motel studio
+   parole riconosciute -> forme di puntini che si materializzano
+   ============================================================= */
+
+const cvs = document.getElementById("stage");
+const ctx = cvs.getContext("2d");
+let W, H, DPR;
+
+function resize(){
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = window.innerWidth; H = window.innerHeight;
+  cvs.width = W*DPR; cvs.height = H*DPR;
+  cvs.style.width=W+"px"; cvs.style.height=H+"px";
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+}
+window.addEventListener("resize", resize);
+resize();
+
+/* ---------- DIZIONARIO FORME ----------
+   ogni entry: array di punti [x,y] normalizzati 0..1 che disegnano la silhouette
+   accetta sinonimi in italiano e inglese
+*/
+
+const SHAPES = {
+  moon: {
+    w: 0.22, h: 0.22, color: "#E8D4A8",
+    points: (n=80) => {
+      const pts = [];
+      for (let i=0;i<n;i++){
+        const a = (i/n) * Math.PI*2;
+        const r = 0.45;
+        let x = 0.5 + Math.cos(a)*r, y = 0.5 + Math.sin(a)*r;
+        // crea la falce togliendo la parte destra
+        const bite = 0.5 + Math.cos(a)*r*0.7 + 0.12;
+        if (bite < x - 0.05) pts.push([x,y]);
+        else pts.push([x,y]);
+      }
+      // aggiungi alcuni punti interni sparsi
+      for (let i=0;i<25;i++){
+        const a = Math.random()*Math.PI*2;
+        const r = Math.random()*0.35;
+        pts.push([0.5 + Math.cos(a)*r, 0.5 + Math.sin(a)*r]);
+      }
+      return pts;
+    }
+  },
+  sun: {
+    w: 0.2, h: 0.2, color: "#E8A67B",
+    points: (n=60) => {
+      const pts = [];
+      for (let i=0;i<n;i++){
+        const a = (i/n) * Math.PI*2;
+        pts.push([0.5 + Math.cos(a)*0.3, 0.5 + Math.sin(a)*0.3]);
+      }
+      // raggi
+      for (let i=0;i<12;i++){
+        const a = (i/12)*Math.PI*2;
+        for (let r=0.35;r<0.48;r+=0.04){
+          pts.push([0.5 + Math.cos(a)*r, 0.5 + Math.sin(a)*r]);
+        }
+      }
+      for (let i=0;i<20;i++){
+        const a = Math.random()*Math.PI*2;
+        const r = Math.random()*0.25;
+        pts.push([0.5 + Math.cos(a)*r, 0.5 + Math.sin(a)*r]);
+      }
+      return pts;
+    }
+  },
+  star: {
+    w: 0.12, h: 0.12, color: "#C9C6E4",
+    points: () => {
+      const pts = [];
+      for (let i=0;i<5;i++){
+        const a = -Math.PI/2 + (i/5)*Math.PI*2;
+        for (let r=0;r<0.45;r+=0.04){
+          pts.push([0.5 + Math.cos(a)*r, 0.5 + Math.sin(a)*r]);
+        }
+      }
+      // croce centrale
+      for (let r=-0.15;r<=0.15;r+=0.03){
+        pts.push([0.5+r, 0.5]);
+        pts.push([0.5, 0.5+r]);
+      }
+      return pts;
+    }
+  },
+  tree: {
+    w: 0.22, h: 0.34, color: "#B8D4C3",
+    points: () => {
+      const pts = [];
+      // tronco
+      for (let y=0.7;y<=1;y+=0.03){
+        pts.push([0.5, y]);
+        pts.push([0.48, y]);
+        pts.push([0.52, y]);
+      }
+      // chioma tonda
+      for (let i=0;i<80;i++){
+        const a = Math.random()*Math.PI*2;
+        const r = Math.random()*0.35;
+        pts.push([0.5 + Math.cos(a)*r, 0.38 + Math.sin(a)*r*0.9]);
+      }
+      // contorno più denso
+      for (let i=0;i<40;i++){
+        const a = (i/40)*Math.PI*2;
+        pts.push([0.5 + Math.cos(a)*0.36, 0.38 + Math.sin(a)*0.33]);
+      }
+      return pts;
+    }
+  },
+  house: {
+    w: 0.26, h: 0.26, color: "#D9A78F",
+    points: () => {
+      const pts = [];
+      // muri
+      for (let y=0.5;y<=0.95;y+=0.04){
+        pts.push([0.25, y]); pts.push([0.75, y]);
+        for (let x=0.25;x<=0.75;x+=0.5){
+          pts.push([x, y]);
+        }
+      }
+      for (let x=0.25;x<=0.75;x+=0.03){
+        pts.push([x, 0.95]);
+      }
+      // tetto triangolo
+      for (let t=0;t<=1;t+=0.025){
+        const xL = 0.25 + (0.5 - 0.25)*t;
+        const xR = 0.75 - (0.75 - 0.5)*t;
+        const y  = 0.5 - t*0.3;
+        pts.push([xL,y]); pts.push([xR,y]);
+      }
+      // porta
+      for (let y=0.75;y<=0.95;y+=0.03){
+        pts.push([0.46,y]); pts.push([0.54,y]);
+      }
+      // finestra
+      for (let y=0.6;y<=0.7;y+=0.03){
+        pts.push([0.32,y]); pts.push([0.4,y]);
+      }
+      return pts;
+    }
+  },
+  bird: {
+    w: 0.18, h: 0.11, color: "#2A2A2A",
+    points: () => {
+      const pts = [];
+      // ala a V
+      for (let t=0;t<=1;t+=0.035){
+        pts.push([0.2 + t*0.3, 0.7 - t*0.5]);
+        pts.push([0.5 + t*0.3, 0.2 + t*0.5]);
+      }
+      return pts;
+    }
+  },
+  cloud: {
+    w: 0.3, h: 0.16, color: "#D0D4DE",
+    points: () => {
+      const pts = [];
+      const circles = [[0.3,0.55,0.22],[0.5,0.45,0.28],[0.7,0.55,0.22],[0.5,0.7,0.2]];
+      for (const [cx,cy,r] of circles){
+        for (let i=0;i<30;i++){
+          const a = (i/30)*Math.PI*2;
+          pts.push([cx+Math.cos(a)*r, cy+Math.sin(a)*r*0.7]);
+        }
+        for (let i=0;i<20;i++){
+          const a = Math.random()*Math.PI*2;
+          const rr = Math.random()*r*0.7;
+          pts.push([cx+Math.cos(a)*rr, cy+Math.sin(a)*rr*0.7]);
+        }
+      }
+      return pts;
+    }
+  },
+  fish: {
+    w: 0.22, h: 0.12, color: "#9DBBD1",
+    points: () => {
+      const pts = [];
+      // corpo a mandorla
+      for (let t=0;t<=1;t+=0.02){
+        const x = 0.15 + t*0.6;
+        const curve = Math.sin(t*Math.PI)*0.18;
+        pts.push([x, 0.5 - curve]);
+        pts.push([x, 0.5 + curve]);
+      }
+      // coda
+      pts.push([0.78,0.35]); pts.push([0.78,0.65]); pts.push([0.9,0.5]);
+      pts.push([0.82,0.42]); pts.push([0.82,0.58]);
+      pts.push([0.88,0.38]); pts.push([0.88,0.62]);
+      // occhio
+      pts.push([0.3,0.48]);
+      return pts;
+    }
+  },
+  sea: {
+    w: 0.5, h: 0.08, color: "#9DBBD1",
+    points: () => {
+      const pts = [];
+      for (let x=0;x<=1;x+=0.015){
+        pts.push([x, 0.5 + Math.sin(x*Math.PI*6)*0.2]);
+        pts.push([x, 0.7 + Math.sin(x*Math.PI*5 + 1)*0.15]);
+        pts.push([x, 0.3 + Math.sin(x*Math.PI*7 + 2)*0.15]);
+      }
+      return pts;
+    }
+  },
+  mountain: {
+    w: 0.4, h: 0.22, color: "#A89F8E",
+    points: () => {
+      const pts = [];
+      // due montagne
+      for (let t=0;t<=1;t+=0.02){
+        const x1 = 0.05 + t*0.45;
+        const y1 = 0.95 - Math.sin(t*Math.PI)*0.75;
+        pts.push([x1,y1]);
+        const x2 = 0.4 + t*0.55;
+        const y2 = 0.95 - Math.sin(t*Math.PI)*0.55;
+        pts.push([x2,y2]);
+      }
+      return pts;
+    }
+  },
+  fire: {
+    w: 0.16, h: 0.22, color: "#E8A67B",
+    points: () => {
+      const pts = [];
+      for (let i=0;i<100;i++){
+        const t = Math.random();
+        const spread = (1-t)*0.35;
+        const x = 0.5 + (Math.random()-0.5)*spread;
+        const y = 1 - t + Math.random()*0.03;
+        pts.push([x,y]);
+      }
+      // punta
+      for (let i=0;i<20;i++){
+        pts.push([0.5 + (Math.random()-0.5)*0.08, Math.random()*0.15]);
+      }
+      return pts;
+    }
+  },
+  eye: {
+    w: 0.22, h: 0.12, color: "#1A1A1A",
+    points: () => {
+      const pts = [];
+      // almond
+      for (let t=0;t<=1;t+=0.015){
+        const x = 0.1 + t*0.8;
+        const curve = Math.sin(t*Math.PI)*0.28;
+        pts.push([x, 0.5 - curve]);
+        pts.push([x, 0.5 + curve]);
+      }
+      // iride
+      for (let i=0;i<25;i++){
+        const a = (i/25)*Math.PI*2;
+        pts.push([0.5 + Math.cos(a)*0.15, 0.5 + Math.sin(a)*0.15]);
+      }
+      // pupilla
+      for (let i=0;i<15;i++){
+        const a = Math.random()*Math.PI*2;
+        const r = Math.random()*0.07;
+        pts.push([0.5 + Math.cos(a)*r, 0.5 + Math.sin(a)*r]);
+      }
+      return pts;
+    }
+  },
+  heart: {
+    w: 0.18, h: 0.16, color: "#D98890",
+    points: () => {
+      const pts = [];
+      for (let i=0;i<100;i++){
+        const t = (i/100)*Math.PI*2;
+        const x = 16*Math.pow(Math.sin(t),3);
+        const y = -(13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t));
+        pts.push([0.5 + x/40, 0.5 + y/40]);
+      }
+      for (let i=0;i<30;i++){
+        const a = Math.random()*Math.PI*2;
+        const r = Math.random()*0.25;
+        pts.push([0.5 + Math.cos(a)*r, 0.5 + Math.sin(a)*r*0.9]);
+      }
+      return pts;
+    }
+  },
+  flower: {
+    w: 0.2, h: 0.22, color: "#E8A67B",
+    points: () => {
+      const pts = [];
+      // petali
+      for (let p=0;p<6;p++){
+        const a = (p/6)*Math.PI*2;
+        for (let r=0.1;r<0.3;r+=0.03){
+          pts.push([0.5 + Math.cos(a)*r, 0.4 + Math.sin(a)*r]);
+        }
+      }
+      // centro
+      for (let i=0;i<15;i++){
+        const a = (i/15)*Math.PI*2;
+        pts.push([0.5 + Math.cos(a)*0.07, 0.4 + Math.sin(a)*0.07]);
+      }
+      // stelo
+      for (let y=0.4;y<=0.95;y+=0.03) pts.push([0.5,y]);
+      // foglia
+      for (let t=0;t<=1;t+=0.05){
+        pts.push([0.5 + t*0.15, 0.7 + (1-t)*0.1]);
+      }
+      return pts;
+    }
+  },
+  hand: {
+    w: 0.18, h: 0.24, color: "#D9A78F",
+    points: () => {
+      const pts = [];
+      // palmo
+      for (let y=0.5;y<=0.95;y+=0.03){
+        for (let x=0.3;x<=0.7;x+=0.08) pts.push([x,y]);
+      }
+      // dita (4 + pollice)
+      const fingers = [0.35,0.48,0.58,0.68];
+      for (const fx of fingers){
+        for (let y=0.15;y<=0.5;y+=0.04) pts.push([fx,y]);
+      }
+      // pollice
+      for (let t=0;t<=1;t+=0.05){
+        pts.push([0.25 - t*0.05, 0.55 + t*0.2]);
+      }
+      return pts;
+    }
+  },
+  key: {
+    w: 0.22, h: 0.08, color: "#C9A87A",
+    points: () => {
+      const pts = [];
+      // anello
+      for (let i=0;i<25;i++){
+        const a = (i/25)*Math.PI*2;
+        pts.push([0.12 + Math.cos(a)*0.08, 0.5 + Math.sin(a)*0.3]);
+      }
+      // asta
+      for (let x=0.2;x<=0.85;x+=0.02) pts.push([x,0.5]);
+      // denti
+      pts.push([0.75,0.6]); pts.push([0.75,0.65]);
+      pts.push([0.82,0.6]); pts.push([0.82,0.7]);
+      return pts;
+    }
+  },
+  boat: {
+    w: 0.26, h: 0.14, color: "#A89F8E",
+    points: () => {
+      const pts = [];
+      // scafo
+      for (let t=0;t<=1;t+=0.02){
+        const x = 0.1 + t*0.8;
+        const y = 0.75 + Math.sin(t*Math.PI)*0.1;
+        pts.push([x,y]);
+      }
+      for (let x=0.1;x<=0.9;x+=0.03) pts.push([x,0.65]);
+      // vela
+      for (let t=0;t<=1;t+=0.03){
+        pts.push([0.5, 0.1 + t*0.55]);
+        pts.push([0.5 + t*0.3, 0.65 - t*0.3]);
+      }
+      return pts;
+    }
+  },
+  door: {
+    w: 0.14, h: 0.28, color: "#8A6A4E",
+    points: () => {
+      const pts = [];
+      // contorno
+      for (let y=0.05;y<=0.95;y+=0.03){
+        pts.push([0.25,y]); pts.push([0.75,y]);
+      }
+      for (let x=0.25;x<=0.75;x+=0.04){
+        pts.push([x,0.05]); pts.push([x,0.95]);
+      }
+      // maniglia
+      pts.push([0.65,0.55]);pts.push([0.65,0.5]);pts.push([0.68,0.52]);
+      return pts;
+    }
+  },
+  cat: {
+    w: 0.2, h: 0.2, color: "#2A2A2A",
+    points: () => {
+      const pts = [];
+      // corpo
+      for (let i=0;i<60;i++){
+        const a = (i/60)*Math.PI*2;
+        pts.push([0.5 + Math.cos(a)*0.3, 0.55 + Math.sin(a)*0.3]);
+      }
+      // orecchie triangolari
+      pts.push([0.25,0.3]); pts.push([0.35,0.1]); pts.push([0.42,0.32]);
+      pts.push([0.58,0.32]); pts.push([0.65,0.1]); pts.push([0.75,0.3]);
+      for (let t=0;t<=1;t+=0.1){
+        pts.push([0.25 + t*0.17, 0.3 - t*0.2]);
+        pts.push([0.58 + t*0.17, 0.32 - t*0.22]);
+      }
+      // occhi
+      pts.push([0.4,0.52]); pts.push([0.6,0.52]);
+      return pts;
+    }
+  },
+  dog: {
+    w: 0.24, h: 0.2, color: "#A89F8E",
+    points: () => {
+      const pts = [];
+      // corpo ovale
+      for (let i=0;i<60;i++){
+        const a = (i/60)*Math.PI*2;
+        pts.push([0.45 + Math.cos(a)*0.3, 0.55 + Math.sin(a)*0.22]);
+      }
+      // muso
+      for (let i=0;i<25;i++){
+        const a = (i/25)*Math.PI*2;
+        pts.push([0.18 + Math.cos(a)*0.1, 0.58 + Math.sin(a)*0.12]);
+      }
+      // orecchio
+      for (let t=0;t<=1;t+=0.05){
+        pts.push([0.25 - t*0.05, 0.4 - t*0.15]);
+      }
+      // zampe
+      for (let y=0.77;y<=0.92;y+=0.03){
+        pts.push([0.3,y]); pts.push([0.45,y]); pts.push([0.6,y]); pts.push([0.7,y]);
+      }
+      return pts;
+    }
+  },
+  rain: {
+    w: 0.3, h: 0.25, color: "#9DBBD1",
+    points: () => {
+      const pts = [];
+      for (let i=0;i<60;i++){
+        const x = Math.random();
+        const y = Math.random();
+        pts.push([x,y]);
+        pts.push([x-0.01,y+0.05]);
+        pts.push([x-0.02,y+0.1]);
+      }
+      return pts;
+    }
+  },
+  wind: {
+    w: 0.35, h: 0.1, color: "#C9C6E4",
+    points: () => {
+      const pts = [];
+      for (let i=0;i<3;i++){
+        const yb = 0.3 + i*0.2;
+        for (let t=0;t<=1;t+=0.01){
+          pts.push([t, yb + Math.sin(t*Math.PI*3 + i)*0.06]);
+        }
+      }
+      return pts;
+    }
+  },
+  ghost: {
+    w: 0.2, h: 0.28, color: "#E4E1D8",
+    points: () => {
+      const pts = [];
+      // testa/corpo a goccia
+      for (let i=0;i<40;i++){
+        const a = (i/40)*Math.PI;
+        pts.push([0.5 + Math.cos(a-Math.PI/2)*0.3, 0.35 + Math.sin(a-Math.PI/2)*0.3]);
+      }
+      for (let x=0.2;x<=0.8;x+=0.03){
+        pts.push([x, 0.65]);
+      }
+      // onde in basso
+      for (let x=0.2;x<=0.8;x+=0.04){
+        pts.push([x, 0.85 + Math.sin(x*Math.PI*6)*0.05]);
+      }
+      // occhi
+      pts.push([0.4,0.35]); pts.push([0.6,0.35]);
+      return pts;
+    }
+  },
+  window: {
+    w: 0.18, h: 0.22, color: "#9DBBD1",
+    points: () => {
+      const pts = [];
+      for (let y=0.1;y<=0.9;y+=0.03){
+        pts.push([0.15,y]); pts.push([0.85,y]); pts.push([0.5,y]);
+      }
+      for (let x=0.15;x<=0.85;x+=0.04){
+        pts.push([x,0.1]); pts.push([x,0.9]); pts.push([x,0.5]);
+      }
+      return pts;
+    }
+  },
+  circle: {
+    w: 0.15, h: 0.15, color: "#E8A67B",
+    points: () => {
+      const pts = [];
+      for (let i=0;i<40;i++){
+        const a = (i/40)*Math.PI*2;
+        pts.push([0.5 + Math.cos(a)*0.4, 0.5 + Math.sin(a)*0.4]);
+      }
+      return pts;
+    }
+  },
+};
+
+/* sinonimi e traduzioni */
+const SYNONYMS = {
+  // moon
+  moon:"moon", luna:"moon",
+  // sun
+  sun:"sun", sole:"sun",
+  // star
+  star:"star", stars:"star", stella:"star", stelle:"star",
+  // tree
+  tree:"tree", trees:"tree", albero:"tree", alberi:"tree", bosco:"tree", forest:"tree",
+  // house
+  house:"house", home:"house", casa:"house",
+  // bird
+  bird:"bird", birds:"bird", uccello:"bird", uccelli:"bird",
+  // cloud
+  cloud:"cloud", clouds:"cloud", nuvola:"cloud", nuvole:"cloud",
+  // fish
+  fish:"fish", pesce:"fish", pesci:"fish",
+  // sea
+  sea:"sea", ocean:"sea", mare:"sea", oceano:"sea", waves:"sea", onde:"sea",
+  // mountain
+  mountain:"mountain", mountains:"mountain", montagna:"mountain", montagne:"mountain",
+  // fire
+  fire:"fire", flame:"fire", fuoco:"fire", fiamma:"fire",
+  // eye
+  eye:"eye", eyes:"eye", occhio:"eye", occhi:"eye",
+  // heart
+  heart:"heart", love:"heart", cuore:"heart", amore:"heart",
+  // flower
+  flower:"flower", flowers:"flower", fiore:"flower", fiori:"flower", rose:"flower", rosa:"flower",
+  // hand
+  hand:"hand", hands:"hand", mano:"hand", mani:"hand",
+  // key
+  key:"key", chiave:"key",
+  // boat
+  boat:"boat", ship:"boat", barca:"boat", nave:"boat",
+  // door
+  door:"door", porta:"door",
+  // cat
+  cat:"cat", gatto:"cat", gatti:"cat",
+  // dog
+  dog:"dog", cane:"dog", cani:"dog",
+  // rain
+  rain:"rain", pioggia:"rain",
+  // wind
+  wind:"wind", vento:"wind", breeze:"wind",
+  // ghost
+  ghost:"ghost", spirit:"ghost", fantasma:"ghost", spirito:"ghost", ghosts:"ghost",
+  // window
+  window:"window", finestra:"window",
+};
+
+/* ---------- DOTS (entità nel canvas) ---------- */
+const dots = [];        // tutti i puntini attivi
+const elements = [];    // gruppi: un gruppo = una parola materializzata
+let dotIdSeq = 0;
+
+function hexWithAlpha(hex, a){
+  const h = hex.replace("#","");
+  const r = parseInt(h.substring(0,2),16);
+  const g = parseInt(h.substring(2,4),16);
+  const b = parseInt(h.substring(4,6),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+/* piazza una forma sul canvas in una posizione trovata */
+function materializeShape(shapeName){
+  const def = SHAPES[shapeName];
+  if (!def) return;
+  const pts = def.points();
+
+  // trova posizione che non si sovrapponga troppo (semplice random con tentativi)
+  const marginX = 0.08, marginY = 0.18; // evita bordi
+  const topBand = 0.25; // evita titolo
+  const bottomBand = 0.82; // evita input
+  const shapeW = def.w * W;
+  const shapeH = def.h * H;
+
+  let cx, cy;
+  let tries = 0;
+  while (true){
+    tries++;
+    cx = marginX*W + Math.random()*(W - 2*marginX*W - shapeW) + shapeW/2;
+    cy = topBand*H + Math.random()*(bottomBand*H - topBand*H - shapeH) + shapeH/2;
+    // controlla distanza dagli elementi esistenti
+    let ok = true;
+    for (const el of elements){
+      const d = Math.hypot(el.cx - cx, el.cy - cy);
+      const minD = (shapeW + el.w) * 0.5;
+      if (d < minD){ ok = false; break; }
+    }
+    if (ok || tries > 30) break;
+  }
+
+  const group = {
+    id: dotIdSeq++,
+    shape: shapeName,
+    cx, cy, w: shapeW, h: shapeH,
+    born: performance.now(),
+    dots: []
+  };
+
+  // crea i dots con partenza random
+  for (const [nx, ny] of pts){
+    const tx = cx + (nx - 0.5) * shapeW;
+    const ty = cy + (ny - 0.5) * shapeH;
+    dots.push({
+      group: group.id,
+      // parte random, converge al target
+      x: cx + (Math.random()-0.5)*W*0.4,
+      y: cy + (Math.random()-0.5)*H*0.4,
+      tx, ty,
+      vx: 0, vy: 0,
+      color: def.color,
+      phase: Math.random()*Math.PI*2,
+      life: 0,
+      alpha: 0,
+    });
+  }
+  elements.push(group);
+
+  // UI: mostra parola riconosciuta
+  flashRecognized(shapeName);
+}
+
+function removeShape(shapeName){
+  // trova l'ultimo gruppo di questo shape e rimuovilo
+  for (let i=elements.length-1;i>=0;i--){
+    if (elements[i].shape === shapeName){
+      const gid = elements[i].id;
+      // rimuovi dots
+      for (let j=dots.length-1;j>=0;j--){
+        if (dots[j].group === gid) dots.splice(j,1);
+      }
+      elements.splice(i,1);
+      return true;
+    }
+  }
+  return false;
+}
+
+function clearAll(){
+  dots.length = 0;
+  elements.length = 0;
+  document.getElementById("recognized").innerHTML = "";
+}
+
+/* ---------- LOOP ---------- */
+function drawFrame(){
+  ctx.clearRect(0,0,W,H);
+
+  const now = performance.now();
+  for (const d of dots){
+    // fisica di convergenza morbida
+    const dx = d.tx - d.x;
+    const dy = d.ty - d.y;
+    d.vx = d.vx*0.88 + dx*0.018;
+    d.vy = d.vy*0.88 + dy*0.018;
+    d.x += d.vx;
+    d.y += d.vy;
+
+    // piccola oscillazione quando a riposo
+    d.phase += 0.018;
+    const restX = Math.sin(d.phase)*0.6;
+    const restY = Math.cos(d.phase*0.8)*0.5;
+
+    // fade in
+    if (d.alpha < 0.7) d.alpha = Math.min(0.7, d.alpha + 0.02);
+
+    // draw
+    ctx.fillStyle = hexWithAlpha(d.color, d.alpha);
+    ctx.beginPath();
+    ctx.arc(d.x + restX, d.y + restY, 1.4, 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  requestAnimationFrame(drawFrame);
+}
+requestAnimationFrame(drawFrame);
+
+/* ---------- INPUT ---------- */
+const input = document.getElementById("dream");
+const counter = document.getElementById("counter");
+const recognizedBox = document.getElementById("recognized");
+let currentShapes = new Set(); // shapes attualmente visualizzate
+
+function parse(text){
+  const words = text.toLowerCase().replace(/[^a-zà-ù\s]/gi, "").split(/\s+/).filter(Boolean);
+  const found = new Set();
+  for (const w of words){
+    if (SYNONYMS[w]) found.add(SYNONYMS[w]);
+  }
+  return found;
+}
+
+function updateFromInput(){
+  const text = input.value;
+  const len = text.length;
+  counter.textContent = String(len).padStart(2,"0") + " / 80";
+  counter.classList.remove("warn","full");
+  if (len >= 70) counter.classList.add("warn");
+  if (len >= 80) counter.classList.add("full");
+
+  const newShapes = parse(text);
+
+  // aggiungi le nuove
+  for (const s of newShapes){
+    if (!currentShapes.has(s)){
+      materializeShape(s);
+      currentShapes.add(s);
+    }
+  }
+  // rimuovi quelle sparite (parola cancellata)
+  for (const s of [...currentShapes]){
+    if (!newShapes.has(s)){
+      removeShape(s);
+      currentShapes.delete(s);
+    }
+  }
+}
+
+input.addEventListener("input", updateFromInput);
+
+document.getElementById("reset").addEventListener("click", ()=>{
+  input.value = "";
+  currentShapes.clear();
+  clearAll();
+  counter.textContent = "00 / 80";
+  counter.classList.remove("warn","full");
+  input.focus();
+});
+
+/* ---------- LISTA PAROLE RICONOSCIUTE ---------- */
+const recognizedHistory = [];
+function flashRecognized(shapeName){
+  const row = document.createElement("span");
+  row.className = "w";
+  row.textContent = "→ " + shapeName;
+  recognizedBox.appendChild(row);
+  requestAnimationFrame(()=>row.classList.add("show"));
+  recognizedHistory.push(row);
+  // mantieni solo ultimi 5
+  while (recognizedHistory.length > 5){
+    const old = recognizedHistory.shift();
+    old.remove();
+  }
+  // fade quelli vecchi
+  for (let i=0;i<recognizedHistory.length;i++){
+    if (i < recognizedHistory.length - 1) recognizedHistory[i].classList.add("fade");
+    else recognizedHistory[i].classList.remove("fade");
+  }
+}
+
+input.focus();
+</script>
+</body>
+</html>
