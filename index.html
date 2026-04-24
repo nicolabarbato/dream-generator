@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#F6F2EA;        /* bianco carta leggermente caldo */
+    --bg:#F6F2EA;
     --ink:#1A1A1A;
     --mute: rgba(26,26,26,.45);
     --peach:#F4C9B1;
@@ -19,11 +19,8 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{
-    height:100%;
-    background:var(--bg);
-    color:var(--ink);
-    overflow:hidden;
-    font-family:"JetBrains Mono",monospace;
+    height:100%;background:var(--bg);color:var(--ink);
+    overflow:hidden;font-family:"JetBrains Mono",monospace;
   }
   body{
     background:
@@ -32,39 +29,29 @@
       radial-gradient(ellipse at 60% 40%, rgba(184,212,195,.14), transparent 60%),
       var(--bg);
   }
-  /* grana leggerissima */
   body::before{
     content:"";position:fixed;inset:0;pointer-events:none;opacity:.15;mix-blend-mode:multiply;z-index:40;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
   }
-
   canvas{position:fixed;inset:0;width:100vw;height:100vh;display:block;z-index:10}
 
-  .chrome{
-    position:fixed;inset:0;pointer-events:none;z-index:20;
-    padding:26px 30px;
-    display:flex;flex-direction:column;
-  }
+  .chrome{position:fixed;inset:0;pointer-events:none;z-index:20;padding:26px 30px;display:flex;flex-direction:column}
   .top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
 
   .brand{
     font-family:"JetBrains Mono",monospace;
     font-size:11px;letter-spacing:.24em;text-transform:lowercase;
-    color:var(--ink);
-    line-height:1.6;
+    color:var(--ink);line-height:1.6;
   }
   .brand .by{color:var(--mute)}
 
-  /* descrizione fluttuante */
   .desc{
     position:fixed;z-index:21;pointer-events:none;
-    top: 50%; left: 8%;
-    transform: translateY(-50%);
-    max-width: 280px;
+    top:50%;left:8%;transform:translateY(-50%);
+    max-width:280px;
     font-family:"JetBrains Mono",monospace;
     font-size:10px;letter-spacing:.16em;text-transform:lowercase;
-    color:var(--mute);
-    line-height:1.9;
+    color:var(--mute);line-height:1.9;
     animation: float 7s ease-in-out infinite;
   }
   @keyframes float {
@@ -72,31 +59,21 @@
     50%     { transform: translateY(calc(-50% - 6px)) translateX(3px); }
   }
 
-  /* titolo al centro in alto */
   .hero{
     position:fixed;z-index:22;pointer-events:none;
-    top: 18%; left: 50%;
-    transform: translateX(-50%);
+    top:18%;left:50%;transform:translateX(-50%);
     text-align:center;
   }
   .hero h1{
-    font-family:"Instrument Serif",serif;
-    font-style:italic;
-    font-weight:400;
+    font-family:"Instrument Serif",serif;font-style:italic;font-weight:400;
     font-size: clamp(48px, 7.5vw, 104px);
-    line-height:1;
-    letter-spacing:-.01em;
-    color:var(--ink);
+    line-height:1;letter-spacing:-.01em;color:var(--ink);
   }
   .hero .dot{color:var(--accent)}
 
-  /* input liquid in basso */
   .input-wrap{
-    position:fixed;z-index:30;
-    bottom: 48px; left: 50%;
-    transform: translateX(-50%);
-    width: min(560px, 88vw);
-    pointer-events:auto;
+    position:fixed;z-index:30;bottom:48px;left:50%;transform:translateX(-50%);
+    width:min(560px,88vw);pointer-events:auto;
   }
   .liquid{
     position:relative;
@@ -111,8 +88,7 @@
       0 -1px 0 rgba(0,0,0,.04) inset,
       0 20px 50px -10px rgba(0,0,0,.08),
       0 6px 20px -8px rgba(232,166,123,.25);
-    display:flex;align-items:center;gap:14px;
-    transition: all .3s ease;
+    display:flex;align-items:center;gap:14px;transition:all .3s ease;
   }
   .liquid:focus-within{
     background: rgba(255,255,255,.5);
@@ -123,69 +99,48 @@
       0 24px 60px -10px rgba(0,0,0,.12),
       0 8px 24px -8px rgba(232,166,123,.4);
   }
-  /* micro alone liquid che pulsa */
   .liquid::after{
     content:"";position:absolute;inset:-1px;border-radius:999px;pointer-events:none;
     background: linear-gradient(135deg, rgba(244,201,177,.4), transparent 40%, rgba(201,198,228,.3));
     opacity:.6;z-index:-1;filter: blur(8px);
   }
-
   .liquid input{
-    flex:1;
-    background:transparent;border:0;outline:0;
-    font-family:"Instrument Serif",serif;
-    font-style:italic;
-    font-size: 20px;
-    color:var(--ink);
-    letter-spacing:-.005em;
+    flex:1;background:transparent;border:0;outline:0;
+    font-family:"Instrument Serif",serif;font-style:italic;font-size:20px;
+    color:var(--ink);letter-spacing:-.005em;
   }
-  .liquid input::placeholder{
-    color: rgba(26,26,26,.35);
-    font-style:italic;
-  }
+  .liquid input::placeholder{color:rgba(26,26,26,.35);font-style:italic}
 
   .counter{
     font-family:"JetBrains Mono",monospace;
     font-size:9px;letter-spacing:.22em;text-transform:uppercase;
-    color:var(--mute);
-    min-width:42px;text-align:right;
-    transition: color .2s;
+    color:var(--mute);min-width:42px;text-align:right;transition:color .2s;
   }
   .counter.warn{color:var(--accent)}
   .counter.full{color:#c24a1e}
 
   .reset{
-    pointer-events:auto;cursor:pointer;
-    background:transparent;border:0;
+    pointer-events:auto;cursor:pointer;background:transparent;border:0;
     font-family:"JetBrains Mono",monospace;
     font-size:9px;letter-spacing:.22em;text-transform:uppercase;
-    color:var(--mute);
-    padding:6px 10px;border-radius:999px;
-    transition: all .2s;
+    color:var(--mute);padding:6px 10px;border-radius:999px;transition:all .2s;
   }
   .reset:hover{color:var(--ink);background:rgba(0,0,0,.04)}
 
-  /* hint sotto l'input */
   .hint{
     margin-top:14px;text-align:center;
     font-family:"JetBrains Mono",monospace;
-    font-size:9px;letter-spacing:.28em;text-transform:uppercase;
-    color:var(--mute);
+    font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--mute);
   }
 
-  /* lista parole riconosciute che lampeggia quando viene aggiunta */
   .recognized{
     position:fixed;z-index:23;pointer-events:none;
-    top: 42%; right: 8%;
-    max-width:180px;text-align:right;
+    top:42%;right:8%;max-width:180px;text-align:right;
     font-family:"JetBrains Mono",monospace;
     font-size:9px;letter-spacing:.22em;text-transform:uppercase;
     color:var(--mute);line-height:1.9;
   }
-  .recognized .w{
-    display:block;opacity:0;transform:translateX(6px);
-    transition: opacity .4s, transform .4s;
-  }
+  .recognized .w{display:block;opacity:0;transform:translateX(6px);transition:opacity .4s,transform .4s}
   .recognized .w.show{opacity:1;transform:translateX(0)}
   .recognized .w.fade{opacity:.35}
 
@@ -217,9 +172,7 @@
   watch it materialize in dust.
 </div>
 
-<div class="hero">
-  <h1>visualize<br/>your <em>dream<span class="dot">.</span></em></h1>
-</div>
+<div class="hero"><h1>visualize<br/>your <em>dream<span class="dot">.</span></em></h1></div>
 
 <div class="recognized" id="recognized"></div>
 
@@ -228,19 +181,17 @@
     <input id="dream" type="text" maxlength="80" placeholder="a house under the moon..." autocomplete="off" spellcheck="false"/>
     <span class="counter" id="counter">00 / 80</span>
   </div>
-  <div class="hint">try: moon · tree · house · bird · cloud · fish · star · sea · fire · eye</div>
+  <div class="hint">try: moon · tree · house · bird · cloud · fish · star · sea · fire · mountain</div>
 </div>
 
 <script>
 /* =============================================================
-   dream generator — motel studio
-   parole riconosciute -> forme di puntini che si materializzano
+   dream generator — volumetric 3D dot clouds
    ============================================================= */
 
 const cvs = document.getElementById("stage");
 const ctx = cvs.getContext("2d");
 let W, H, DPR;
-
 function resize(){
   DPR = Math.min(window.devicePixelRatio || 1, 2);
   W = window.innerWidth; H = window.innerHeight;
@@ -251,544 +202,615 @@ function resize(){
 window.addEventListener("resize", resize);
 resize();
 
-/* ---------- DIZIONARIO FORME ----------
-   ogni entry: array di punti [x,y] normalizzati 0..1 che disegnano la silhouette
-   accetta sinonimi in italiano e inglese
+/* ---------- GENERATORI 3D ----------
+   ogni shape ritorna un array di punti [x,y,z] nel range -0.5..0.5
+   la scala reale viene applicata dopo (w,h,d in unità mondo)
 */
+
+const TAU = Math.PI*2;
+const rand = (a,b) => a + Math.random()*(b-a);
+
+function sphereSurface(n, radius=0.5, jitter=0){
+  // fibonacci sphere per distribuzione uniforme
+  const pts = [];
+  const phi = Math.PI*(3 - Math.sqrt(5));
+  for (let i=0;i<n;i++){
+    const y = 1 - (i/(n-1))*2;
+    const r = Math.sqrt(1 - y*y);
+    const theta = phi*i;
+    const x = Math.cos(theta)*r;
+    const z = Math.sin(theta)*r;
+    const j = jitter*(Math.random()*2-1);
+    pts.push([x*radius*(1+j), y*radius*(1+j), z*radius*(1+j)]);
+  }
+  return pts;
+}
+
+function sphereVolume(n, radius=0.5){
+  const pts = [];
+  for (let i=0;i<n;i++){
+    // distribuzione uniforme in volume
+    const u = Math.random();
+    const v = Math.random();
+    const theta = u*TAU;
+    const phi = Math.acos(2*v - 1);
+    const r = radius * Math.cbrt(Math.random());
+    pts.push([
+      r*Math.sin(phi)*Math.cos(theta),
+      r*Math.sin(phi)*Math.sin(theta),
+      r*Math.cos(phi),
+    ]);
+  }
+  return pts;
+}
+
+function cylinderSurface(n, radius=0.2, height=1){
+  const pts = [];
+  for (let i=0;i<n;i++){
+    const a = Math.random()*TAU;
+    const y = (Math.random()-0.5)*height;
+    pts.push([Math.cos(a)*radius, y, Math.sin(a)*radius]);
+  }
+  return pts;
+}
+
+function boxSurface(n, w=1, h=1, d=1){
+  const pts = [];
+  const faces = [
+    [w, h, d, "xy+"], [w, h, d, "xy-"],
+    [w, h, d, "xz+"], [w, h, d, "xz-"],
+    [w, h, d, "yz+"], [w, h, d, "yz-"],
+  ];
+  for (let i=0;i<n;i++){
+    const f = faces[i % 6];
+    const u = Math.random()-0.5;
+    const v = Math.random()-0.5;
+    let p;
+    switch(f[3]){
+      case "xy+": p=[u*w, v*h,  d/2]; break;
+      case "xy-": p=[u*w, v*h, -d/2]; break;
+      case "xz+": p=[u*w,  h/2, v*d]; break;
+      case "xz-": p=[u*w, -h/2, v*d]; break;
+      case "yz+": p=[ w/2, u*h, v*d]; break;
+      case "yz-": p=[-w/2, u*h, v*d]; break;
+    }
+    pts.push(p);
+  }
+  return pts;
+}
+
+function discVolume(n, radius=0.5, thickness=0.1){
+  const pts = [];
+  for (let i=0;i<n;i++){
+    const a = Math.random()*TAU;
+    const r = radius * Math.sqrt(Math.random());
+    pts.push([Math.cos(a)*r, (Math.random()-0.5)*thickness, Math.sin(a)*r]);
+  }
+  return pts;
+}
+
+/* ---------- DIZIONARIO FORME 3D ---------- */
 
 const SHAPES = {
   moon: {
-    w: 0.22, h: 0.22, color: "#E8D4A8",
-    points: (n=80) => {
-      const pts = [];
-      for (let i=0;i<n;i++){
-        const a = (i/n) * Math.PI*2;
-        const r = 0.45;
-        let x = 0.5 + Math.cos(a)*r, y = 0.5 + Math.sin(a)*r;
-        // crea la falce togliendo la parte destra
-        const bite = 0.5 + Math.cos(a)*r*0.7 + 0.12;
-        if (bite < x - 0.05) pts.push([x,y]);
-        else pts.push([x,y]);
-      }
-      // aggiungi alcuni punti interni sparsi
-      for (let i=0;i<25;i++){
-        const a = Math.random()*Math.PI*2;
-        const r = Math.random()*0.35;
-        pts.push([0.5 + Math.cos(a)*r, 0.5 + Math.sin(a)*r]);
-      }
-      return pts;
-    }
+    scale: [0.20, 0.20, 0.20],
+    color: "#E8D4A8",
+    build: () => sphereSurface(420, 0.5, 0.02).concat(sphereVolume(80, 0.45)),
   },
   sun: {
-    w: 0.2, h: 0.2, color: "#E8A67B",
-    points: (n=60) => {
-      const pts = [];
-      for (let i=0;i<n;i++){
-        const a = (i/n) * Math.PI*2;
-        pts.push([0.5 + Math.cos(a)*0.3, 0.5 + Math.sin(a)*0.3]);
-      }
-      // raggi
-      for (let i=0;i<12;i++){
-        const a = (i/12)*Math.PI*2;
-        for (let r=0.35;r<0.48;r+=0.04){
-          pts.push([0.5 + Math.cos(a)*r, 0.5 + Math.sin(a)*r]);
-        }
-      }
-      for (let i=0;i<20;i++){
-        const a = Math.random()*Math.PI*2;
-        const r = Math.random()*0.25;
-        pts.push([0.5 + Math.cos(a)*r, 0.5 + Math.sin(a)*r]);
+    scale: [0.22, 0.22, 0.22],
+    color: "#E8A67B",
+    build: () => {
+      const pts = sphereSurface(380, 0.42, 0.03);
+      // raggi sparsi volumetrici
+      for (let i=0;i<80;i++){
+        const a = Math.random()*TAU;
+        const b = (Math.random()-0.5)*Math.PI;
+        const r = 0.45 + Math.random()*0.3;
+        pts.push([Math.cos(a)*Math.cos(b)*r, Math.sin(b)*r, Math.sin(a)*Math.cos(b)*r]);
       }
       return pts;
     }
   },
   star: {
-    w: 0.12, h: 0.12, color: "#C9C6E4",
-    points: () => {
+    scale: [0.16, 0.16, 0.16],
+    color: "#C9C6E4",
+    build: () => {
       const pts = [];
-      for (let i=0;i<5;i++){
-        const a = -Math.PI/2 + (i/5)*Math.PI*2;
-        for (let r=0;r<0.45;r+=0.04){
-          pts.push([0.5 + Math.cos(a)*r, 0.5 + Math.sin(a)*r]);
+      // 5 punte che escono dal centro
+      for (let p=0;p<5;p++){
+        const a = -Math.PI/2 + (p/5)*TAU;
+        for (let t=0;t<=1;t+=0.018){
+          const r = t*0.5;
+          const spread = (1-t)*0.05;
+          pts.push([
+            Math.cos(a)*r + rand(-spread,spread),
+            Math.sin(a)*r + rand(-spread,spread),
+            rand(-spread,spread)*0.5,
+          ]);
         }
       }
-      // croce centrale
-      for (let r=-0.15;r<=0.15;r+=0.03){
-        pts.push([0.5+r, 0.5]);
-        pts.push([0.5, 0.5+r]);
-      }
+      // nucleo
+      for (const p of sphereVolume(60, 0.08)) pts.push(p);
       return pts;
     }
   },
   tree: {
-    w: 0.22, h: 0.34, color: "#B8D4C3",
-    points: () => {
+    scale: [0.24, 0.34, 0.24],
+    color: "#6E8873",
+    build: () => {
       const pts = [];
-      // tronco
-      for (let y=0.7;y<=1;y+=0.03){
-        pts.push([0.5, y]);
-        pts.push([0.48, y]);
-        pts.push([0.52, y]);
-      }
-      // chioma tonda
-      for (let i=0;i<80;i++){
-        const a = Math.random()*Math.PI*2;
-        const r = Math.random()*0.35;
-        pts.push([0.5 + Math.cos(a)*r, 0.38 + Math.sin(a)*r*0.9]);
-      }
-      // contorno più denso
-      for (let i=0;i<40;i++){
-        const a = (i/40)*Math.PI*2;
-        pts.push([0.5 + Math.cos(a)*0.36, 0.38 + Math.sin(a)*0.33]);
-      }
+      // tronco cilindrico
+      for (const p of cylinderSurface(120, 0.06, 0.55)) pts.push([p[0], p[1]+0.18, p[2]]);
+      // chioma: sfera gonfia
+      const crown = sphereVolume(500, 0.35);
+      for (const p of crown) pts.push([p[0], p[1]-0.2, p[2]]);
+      // superficie chioma più densa
+      for (const p of sphereSurface(200, 0.36, 0.1)) pts.push([p[0], p[1]-0.2, p[2]]);
       return pts;
     }
   },
   house: {
-    w: 0.26, h: 0.26, color: "#D9A78F",
-    points: () => {
+    scale: [0.28, 0.3, 0.28],
+    color: "#C89A82",
+    build: () => {
       const pts = [];
-      // muri
-      for (let y=0.5;y<=0.95;y+=0.04){
-        pts.push([0.25, y]); pts.push([0.75, y]);
-        for (let x=0.25;x<=0.75;x+=0.5){
-          pts.push([x, y]);
-        }
+      // corpo cubico
+      for (const p of boxSurface(400, 0.7, 0.5, 0.7)) pts.push([p[0], p[1]+0.1, p[2]]);
+      // tetto: 4 facce triangolari fino all'apice
+      const apex = [0, 0.6, 0];
+      const base = [
+        [-0.35, 0.35, -0.35],[0.35, 0.35, -0.35],
+        [0.35, 0.35, 0.35],[-0.35, 0.35, 0.35]
+      ];
+      for (let i=0;i<300;i++){
+        const edge = i % 4;
+        const v1 = base[edge], v2 = base[(edge+1)%4];
+        const t = Math.random();
+        const s = Math.random()*(1-t);
+        pts.push([
+          v1[0]*t + v2[0]*s + apex[0]*(1-t-s),
+          v1[1]*t + v2[1]*s + apex[1]*(1-t-s),
+          v1[2]*t + v2[2]*s + apex[2]*(1-t-s),
+        ]);
       }
-      for (let x=0.25;x<=0.75;x+=0.03){
-        pts.push([x, 0.95]);
-      }
-      // tetto triangolo
-      for (let t=0;t<=1;t+=0.025){
-        const xL = 0.25 + (0.5 - 0.25)*t;
-        const xR = 0.75 - (0.75 - 0.5)*t;
-        const y  = 0.5 - t*0.3;
-        pts.push([xL,y]); pts.push([xR,y]);
-      }
-      // porta
-      for (let y=0.75;y<=0.95;y+=0.03){
-        pts.push([0.46,y]); pts.push([0.54,y]);
-      }
-      // finestra
-      for (let y=0.6;y<=0.7;y+=0.03){
-        pts.push([0.32,y]); pts.push([0.4,y]);
-      }
+      // piccolo camino
+      for (const p of cylinderSurface(40, 0.04, 0.15)) pts.push([p[0]+0.18, p[1]+0.58, p[2]]);
       return pts;
     }
   },
   bird: {
-    w: 0.18, h: 0.11, color: "#2A2A2A",
-    points: () => {
+    scale: [0.22, 0.12, 0.12],
+    color: "#2A2A2A",
+    build: () => {
       const pts = [];
-      // ala a V
-      for (let t=0;t<=1;t+=0.035){
-        pts.push([0.2 + t*0.3, 0.7 - t*0.5]);
-        pts.push([0.5 + t*0.3, 0.2 + t*0.5]);
+      // corpo allungato (ellissoide)
+      for (let i=0;i<180;i++){
+        const u = Math.random()*TAU;
+        const v = Math.acos(2*Math.random()-1);
+        pts.push([
+          Math.sin(v)*Math.cos(u)*0.25,
+          Math.sin(v)*Math.sin(u)*0.12,
+          Math.cos(v)*0.12,
+        ]);
+      }
+      // ali aperte (due piani)
+      for (let i=0;i<140;i++){
+        const side = Math.random()<.5 ? -1 : 1;
+        const t = Math.random();
+        pts.push([
+          (0.1 + t*0.35)*side + rand(-0.02,0.02),
+          rand(-0.02,0.02),
+          rand(-0.04,0.04),
+        ]);
+      }
+      // coda a ventaglio
+      for (let i=0;i<40;i++){
+        const t = Math.random();
+        pts.push([-0.3 - t*0.12, rand(-0.03,0.03), rand(-0.1,0.1)*(1+t)]);
       }
       return pts;
     }
   },
   cloud: {
-    w: 0.3, h: 0.16, color: "#D0D4DE",
-    points: () => {
+    scale: [0.4, 0.18, 0.3],
+    color: "#D0D4DE",
+    build: () => {
       const pts = [];
-      const circles = [[0.3,0.55,0.22],[0.5,0.45,0.28],[0.7,0.55,0.22],[0.5,0.7,0.2]];
-      for (const [cx,cy,r] of circles){
-        for (let i=0;i<30;i++){
-          const a = (i/30)*Math.PI*2;
-          pts.push([cx+Math.cos(a)*r, cy+Math.sin(a)*r*0.7]);
+      // più sfere unite
+      const clumps = [
+        [-0.3, 0, 0, 0.22],
+        [-0.1, 0.05, 0, 0.28],
+        [0.15, -0.02, 0.05, 0.26],
+        [0.35, 0.02, -0.05, 0.2],
+        [0, 0.1, -0.1, 0.22],
+      ];
+      for (const [cx,cy,cz,r] of clumps){
+        for (const p of sphereVolume(120, r)){
+          pts.push([p[0]+cx, p[1]+cy, p[2]+cz]);
         }
-        for (let i=0;i<20;i++){
-          const a = Math.random()*Math.PI*2;
-          const rr = Math.random()*r*0.7;
-          pts.push([cx+Math.cos(a)*rr, cy+Math.sin(a)*rr*0.7]);
+        for (const p of sphereSurface(60, r, 0.08)){
+          pts.push([p[0]+cx, p[1]+cy, p[2]+cz]);
         }
       }
       return pts;
     }
   },
   fish: {
-    w: 0.22, h: 0.12, color: "#9DBBD1",
-    points: () => {
+    scale: [0.26, 0.14, 0.1],
+    color: "#7FA5C2",
+    build: () => {
       const pts = [];
-      // corpo a mandorla
-      for (let t=0;t<=1;t+=0.02){
-        const x = 0.15 + t*0.6;
-        const curve = Math.sin(t*Math.PI)*0.18;
-        pts.push([x, 0.5 - curve]);
-        pts.push([x, 0.5 + curve]);
+      // corpo a mandorla 3d
+      for (let i=0;i<280;i++){
+        const t = Math.random();
+        const curve = Math.sin(t*Math.PI);
+        const r = curve * 0.18 * rand(0.85,1.0);
+        const a = Math.random()*TAU;
+        pts.push([
+          -0.3 + t*0.6,
+          Math.cos(a)*r,
+          Math.sin(a)*r*0.6,
+        ]);
       }
-      // coda
-      pts.push([0.78,0.35]); pts.push([0.78,0.65]); pts.push([0.9,0.5]);
-      pts.push([0.82,0.42]); pts.push([0.82,0.58]);
-      pts.push([0.88,0.38]); pts.push([0.88,0.62]);
-      // occhio
-      pts.push([0.3,0.48]);
+      // coda a ventaglio verticale
+      for (let i=0;i<80;i++){
+        const t = Math.random();
+        pts.push([0.3 + t*0.18, (Math.random()-0.5)*0.25*t, rand(-0.02,0.02)]);
+      }
+      // pinna dorsale
+      for (let i=0;i<40;i++){
+        const t = Math.random();
+        pts.push([-0.1 + t*0.3, 0.15 + rand(0, 0.08), rand(-0.01,0.01)]);
+      }
       return pts;
     }
   },
   sea: {
-    w: 0.5, h: 0.08, color: "#9DBBD1",
-    points: () => {
+    scale: [0.7, 0.15, 0.4],
+    color: "#7FA5C2",
+    build: () => {
       const pts = [];
-      for (let x=0;x<=1;x+=0.015){
-        pts.push([x, 0.5 + Math.sin(x*Math.PI*6)*0.2]);
-        pts.push([x, 0.7 + Math.sin(x*Math.PI*5 + 1)*0.15]);
-        pts.push([x, 0.3 + Math.sin(x*Math.PI*7 + 2)*0.15]);
+      // superficie con onde
+      for (let i=0;i<900;i++){
+        const x = Math.random()-0.5;
+        const z = Math.random()-0.5;
+        const y = Math.sin(x*TAU*2 + z*TAU)*0.06 + Math.sin(x*TAU*5)*0.03;
+        pts.push([x, y, z]);
       }
       return pts;
     }
   },
   mountain: {
-    w: 0.4, h: 0.22, color: "#A89F8E",
-    points: () => {
+    scale: [0.5, 0.3, 0.5],
+    color: "#8A8678",
+    build: () => {
       const pts = [];
-      // due montagne
-      for (let t=0;t<=1;t+=0.02){
-        const x1 = 0.05 + t*0.45;
-        const y1 = 0.95 - Math.sin(t*Math.PI)*0.75;
-        pts.push([x1,y1]);
-        const x2 = 0.4 + t*0.55;
-        const y2 = 0.95 - Math.sin(t*Math.PI)*0.55;
-        pts.push([x2,y2]);
+      // 2 coni di punti
+      const peaks = [[-0.15, 0, 0, 0.3, 0.45],[0.2, 0, -0.1, 0.25, 0.35]];
+      for (const [px,py,pz,base,height] of peaks){
+        for (let i=0;i<350;i++){
+          const t = Math.random(); // altezza 0..1
+          const r = (1-t)*base;
+          const a = Math.random()*TAU;
+          pts.push([
+            px + Math.cos(a)*r,
+            py - 0.25 + t*height,
+            pz + Math.sin(a)*r,
+          ]);
+        }
       }
       return pts;
     }
   },
   fire: {
-    w: 0.16, h: 0.22, color: "#E8A67B",
-    points: () => {
+    scale: [0.18, 0.3, 0.18],
+    color: "#E8A67B",
+    build: () => {
       const pts = [];
-      for (let i=0;i<100;i++){
-        const t = Math.random();
-        const spread = (1-t)*0.35;
-        const x = 0.5 + (Math.random()-0.5)*spread;
-        const y = 1 - t + Math.random()*0.03;
-        pts.push([x,y]);
-      }
-      // punta
-      for (let i=0;i<20;i++){
-        pts.push([0.5 + (Math.random()-0.5)*0.08, Math.random()*0.15]);
+      for (let i=0;i<400;i++){
+        const t = Math.pow(Math.random(), 0.6); // più denso in basso
+        const r = (1 - t*0.8) * 0.18;
+        const a = Math.random()*TAU;
+        pts.push([
+          Math.cos(a)*r + rand(-0.02,0.02),
+          -0.3 + t*0.6,
+          Math.sin(a)*r + rand(-0.02,0.02),
+        ]);
       }
       return pts;
     }
   },
   eye: {
-    w: 0.22, h: 0.12, color: "#1A1A1A",
-    points: () => {
+    scale: [0.28, 0.18, 0.22],
+    color: "#1A1A1A",
+    build: () => {
       const pts = [];
-      // almond
-      for (let t=0;t<=1;t+=0.015){
-        const x = 0.1 + t*0.8;
-        const curve = Math.sin(t*Math.PI)*0.28;
-        pts.push([x, 0.5 - curve]);
-        pts.push([x, 0.5 + curve]);
+      // palpebra a mandorla
+      for (let i=0;i<260;i++){
+        const t = Math.random();
+        const curve = Math.sin(t*Math.PI);
+        const r = curve * 0.22;
+        const side = Math.random()<.5 ? 1 : -1;
+        pts.push([
+          -0.4 + t*0.8,
+          side * r * 0.9,
+          rand(-0.04,0.04),
+        ]);
       }
-      // iride
-      for (let i=0;i<25;i++){
-        const a = (i/25)*Math.PI*2;
-        pts.push([0.5 + Math.cos(a)*0.15, 0.5 + Math.sin(a)*0.15]);
-      }
-      // pupilla
-      for (let i=0;i<15;i++){
-        const a = Math.random()*Math.PI*2;
-        const r = Math.random()*0.07;
-        pts.push([0.5 + Math.cos(a)*r, 0.5 + Math.sin(a)*r]);
-      }
+      // bulbo (sfera al centro)
+      for (const p of sphereVolume(160, 0.18)) pts.push([p[0]*0.9, p[1]*0.8, p[2]]);
+      // pupilla scura al centro frontale
+      for (const p of sphereVolume(40, 0.05)) pts.push([p[0], p[1], p[2]+0.1]);
       return pts;
     }
   },
   heart: {
-    w: 0.18, h: 0.16, color: "#D98890",
-    points: () => {
+    scale: [0.24, 0.22, 0.2],
+    color: "#D87A85",
+    build: () => {
       const pts = [];
-      for (let i=0;i<100;i++){
-        const t = (i/100)*Math.PI*2;
+      // parametrico cuore + profondità
+      for (let i=0;i<500;i++){
+        const t = Math.random()*TAU;
+        const r = Math.random();
         const x = 16*Math.pow(Math.sin(t),3);
         const y = -(13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t));
-        pts.push([0.5 + x/40, 0.5 + y/40]);
-      }
-      for (let i=0;i<30;i++){
-        const a = Math.random()*Math.PI*2;
-        const r = Math.random()*0.25;
-        pts.push([0.5 + Math.cos(a)*r, 0.5 + Math.sin(a)*r*0.9]);
+        const z = (Math.random()-0.5) * (1-r*0.3) * 10;
+        pts.push([x/40*r + (x/40)*(1-r)*0.5, y/40*r + (y/40)*(1-r)*0.5, z/40]);
       }
       return pts;
     }
   },
   flower: {
-    w: 0.2, h: 0.22, color: "#E8A67B",
-    points: () => {
+    scale: [0.24, 0.32, 0.24],
+    color: "#E8A67B",
+    build: () => {
       const pts = [];
-      // petali
+      // petali volumetrici
       for (let p=0;p<6;p++){
-        const a = (p/6)*Math.PI*2;
-        for (let r=0.1;r<0.3;r+=0.03){
-          pts.push([0.5 + Math.cos(a)*r, 0.4 + Math.sin(a)*r]);
+        const pa = (p/6)*TAU;
+        for (let i=0;i<70;i++){
+          const t = Math.random();
+          const r = 0.08 + t*0.2;
+          const spread = (1-Math.abs(t-0.5)*2)*0.12;
+          pts.push([
+            Math.cos(pa)*r + Math.cos(pa+Math.PI/2)*rand(-spread,spread),
+            -0.15 + rand(-0.03,0.03),
+            Math.sin(pa)*r + Math.sin(pa+Math.PI/2)*rand(-spread,spread),
+          ]);
         }
       }
       // centro
-      for (let i=0;i<15;i++){
-        const a = (i/15)*Math.PI*2;
-        pts.push([0.5 + Math.cos(a)*0.07, 0.4 + Math.sin(a)*0.07]);
-      }
+      for (const p of sphereVolume(60, 0.08)) pts.push([p[0], p[1]-0.15, p[2]]);
       // stelo
-      for (let y=0.4;y<=0.95;y+=0.03) pts.push([0.5,y]);
-      // foglia
-      for (let t=0;t<=1;t+=0.05){
-        pts.push([0.5 + t*0.15, 0.7 + (1-t)*0.1]);
-      }
+      for (const p of cylinderSurface(80, 0.02, 0.5)) pts.push([p[0], p[1]+0.15, p[2]]);
       return pts;
     }
   },
   hand: {
-    w: 0.18, h: 0.24, color: "#D9A78F",
-    points: () => {
+    scale: [0.22, 0.3, 0.1],
+    color: "#D9A78F",
+    build: () => {
       const pts = [];
-      // palmo
-      for (let y=0.5;y<=0.95;y+=0.03){
-        for (let x=0.3;x<=0.7;x+=0.08) pts.push([x,y]);
-      }
-      // dita (4 + pollice)
-      const fingers = [0.35,0.48,0.58,0.68];
-      for (const fx of fingers){
-        for (let y=0.15;y<=0.5;y+=0.04) pts.push([fx,y]);
+      // palmo come box appiattito
+      for (const p of boxSurface(180, 0.4, 0.35, 0.12)) pts.push([p[0], p[1]+0.05, p[2]]);
+      // 4 dita
+      const fx = [-0.15,-0.05,0.08,0.17];
+      for (const x of fx){
+        for (const p of cylinderSurface(50, 0.04, 0.3)) pts.push([p[0]+x, p[1]-0.3, p[2]]);
       }
       // pollice
-      for (let t=0;t<=1;t+=0.05){
-        pts.push([0.25 - t*0.05, 0.55 + t*0.2]);
-      }
-      return pts;
-    }
-  },
-  key: {
-    w: 0.22, h: 0.08, color: "#C9A87A",
-    points: () => {
-      const pts = [];
-      // anello
-      for (let i=0;i<25;i++){
-        const a = (i/25)*Math.PI*2;
-        pts.push([0.12 + Math.cos(a)*0.08, 0.5 + Math.sin(a)*0.3]);
-      }
-      // asta
-      for (let x=0.2;x<=0.85;x+=0.02) pts.push([x,0.5]);
-      // denti
-      pts.push([0.75,0.6]); pts.push([0.75,0.65]);
-      pts.push([0.82,0.6]); pts.push([0.82,0.7]);
+      for (const p of cylinderSurface(50, 0.04, 0.22)) pts.push([p[0]-0.25, p[1]+0.05, p[2]+0.02]);
       return pts;
     }
   },
   boat: {
-    w: 0.26, h: 0.14, color: "#A89F8E",
-    points: () => {
+    scale: [0.3, 0.22, 0.14],
+    color: "#8A7A6A",
+    build: () => {
       const pts = [];
-      // scafo
-      for (let t=0;t<=1;t+=0.02){
-        const x = 0.1 + t*0.8;
-        const y = 0.75 + Math.sin(t*Math.PI)*0.1;
-        pts.push([x,y]);
+      // scafo a U
+      for (let i=0;i<250;i++){
+        const t = Math.random();
+        const a = Math.random()*Math.PI;
+        pts.push([
+          -0.4 + t*0.8,
+          -Math.sin(a)*0.1,
+          Math.cos(a)*0.08 + rand(-0.01,0.01),
+        ]);
       }
-      for (let x=0.1;x<=0.9;x+=0.03) pts.push([x,0.65]);
-      // vela
-      for (let t=0;t<=1;t+=0.03){
-        pts.push([0.5, 0.1 + t*0.55]);
-        pts.push([0.5 + t*0.3, 0.65 - t*0.3]);
+      // bordo superiore
+      for (let i=0;i<80;i++){
+        const t = Math.random();
+        const side = Math.random()<.5 ? 1 : -1;
+        pts.push([-0.4 + t*0.8, 0, side*0.08]);
+      }
+      // albero
+      for (const p of cylinderSurface(60, 0.015, 0.5)) pts.push([p[0]+0.05, p[1]+0.25, p[2]]);
+      // vela triangolare
+      for (let i=0;i<120;i++){
+        const t = Math.random();
+        const s = Math.random()*(1-t);
+        pts.push([
+          0.05 + t*0.2 + s*0.0,
+          -0.05 + t*0.5 + s*0.0,
+          rand(-0.01,0.01),
+        ]);
       }
       return pts;
     }
   },
   door: {
-    w: 0.14, h: 0.28, color: "#8A6A4E",
-    points: () => {
-      const pts = [];
-      // contorno
-      for (let y=0.05;y<=0.95;y+=0.03){
-        pts.push([0.25,y]); pts.push([0.75,y]);
-      }
-      for (let x=0.25;x<=0.75;x+=0.04){
-        pts.push([x,0.05]); pts.push([x,0.95]);
-      }
-      // maniglia
-      pts.push([0.65,0.55]);pts.push([0.65,0.5]);pts.push([0.68,0.52]);
-      return pts;
-    }
+    scale: [0.14, 0.3, 0.06],
+    color: "#7A5A3E",
+    build: () => boxSurface(300, 0.5, 1, 0.2),
   },
   cat: {
-    w: 0.2, h: 0.2, color: "#2A2A2A",
-    points: () => {
+    scale: [0.22, 0.22, 0.22],
+    color: "#2A2A2A",
+    build: () => {
       const pts = [];
-      // corpo
-      for (let i=0;i<60;i++){
-        const a = (i/60)*Math.PI*2;
-        pts.push([0.5 + Math.cos(a)*0.3, 0.55 + Math.sin(a)*0.3]);
-      }
+      // corpo sfera
+      for (const p of sphereVolume(250, 0.3)) pts.push([p[0], p[1]+0.05, p[2]]);
       // orecchie triangolari
-      pts.push([0.25,0.3]); pts.push([0.35,0.1]); pts.push([0.42,0.32]);
-      pts.push([0.58,0.32]); pts.push([0.65,0.1]); pts.push([0.75,0.3]);
-      for (let t=0;t<=1;t+=0.1){
-        pts.push([0.25 + t*0.17, 0.3 - t*0.2]);
-        pts.push([0.58 + t*0.17, 0.32 - t*0.22]);
+      const earBases = [[-0.18, 0.28, 0],[0.18, 0.28, 0]];
+      for (const eb of earBases){
+        for (let i=0;i<40;i++){
+          const t = Math.random();
+          const s = Math.random()*(1-t)*0.1;
+          pts.push([eb[0] + s, eb[1] + t*0.15, eb[2] + rand(-0.02,0.02)]);
+        }
       }
       // occhi
-      pts.push([0.4,0.52]); pts.push([0.6,0.52]);
+      for (let i=0;i<15;i++){
+        pts.push([-0.1 + rand(-0.02,0.02), 0.1, 0.25]);
+        pts.push([0.1 + rand(-0.02,0.02), 0.1, 0.25]);
+      }
       return pts;
     }
   },
   dog: {
-    w: 0.24, h: 0.2, color: "#A89F8E",
-    points: () => {
+    scale: [0.28, 0.22, 0.18],
+    color: "#A89F8E",
+    build: () => {
       const pts = [];
-      // corpo ovale
-      for (let i=0;i<60;i++){
-        const a = (i/60)*Math.PI*2;
-        pts.push([0.45 + Math.cos(a)*0.3, 0.55 + Math.sin(a)*0.22]);
+      // corpo ellissoide
+      for (let i=0;i<260;i++){
+        const u = Math.random()*TAU;
+        const v = Math.acos(2*Math.random()-1);
+        pts.push([
+          Math.sin(v)*Math.cos(u)*0.3,
+          Math.sin(v)*Math.sin(u)*0.18,
+          Math.cos(v)*0.2,
+        ]);
       }
       // muso
-      for (let i=0;i<25;i++){
-        const a = (i/25)*Math.PI*2;
-        pts.push([0.18 + Math.cos(a)*0.1, 0.58 + Math.sin(a)*0.12]);
-      }
+      for (const p of sphereVolume(80, 0.1)) pts.push([p[0]-0.28, p[1]+0.05, p[2]]);
       // orecchio
-      for (let t=0;t<=1;t+=0.05){
-        pts.push([0.25 - t*0.05, 0.4 - t*0.15]);
+      for (let i=0;i<40;i++){
+        const t = Math.random();
+        pts.push([-0.2 - t*0.05, 0.18 + t*0.08, rand(-0.1,0.1)]);
       }
       // zampe
-      for (let y=0.77;y<=0.92;y+=0.03){
-        pts.push([0.3,y]); pts.push([0.45,y]); pts.push([0.6,y]); pts.push([0.7,y]);
+      for (const x of [-0.18, 0.18]){
+        for (const z of [-0.1, 0.1]){
+          for (const p of cylinderSurface(30, 0.03, 0.18)) pts.push([p[0]+x, p[1]-0.25, p[2]+z]);
+        }
       }
       return pts;
     }
   },
   rain: {
-    w: 0.3, h: 0.25, color: "#9DBBD1",
-    points: () => {
+    scale: [0.4, 0.5, 0.3],
+    color: "#7FA5C2",
+    build: () => {
       const pts = [];
-      for (let i=0;i<60;i++){
-        const x = Math.random();
-        const y = Math.random();
-        pts.push([x,y]);
-        pts.push([x-0.01,y+0.05]);
-        pts.push([x-0.02,y+0.1]);
-      }
-      return pts;
-    }
-  },
-  wind: {
-    w: 0.35, h: 0.1, color: "#C9C6E4",
-    points: () => {
-      const pts = [];
-      for (let i=0;i<3;i++){
-        const yb = 0.3 + i*0.2;
-        for (let t=0;t<=1;t+=0.01){
-          pts.push([t, yb + Math.sin(t*Math.PI*3 + i)*0.06]);
+      for (let i=0;i<250;i++){
+        const x = Math.random()-0.5;
+        const y = Math.random()-0.5;
+        const z = Math.random()-0.5;
+        // ogni goccia: 3 punti verticali ravvicinati
+        for (let k=0;k<3;k++){
+          pts.push([x, y - k*0.03, z]);
         }
       }
       return pts;
     }
   },
   ghost: {
-    w: 0.2, h: 0.28, color: "#E4E1D8",
-    points: () => {
+    scale: [0.22, 0.32, 0.2],
+    color: "#E4E1D8",
+    build: () => {
       const pts = [];
-      // testa/corpo a goccia
-      for (let i=0;i<40;i++){
-        const a = (i/40)*Math.PI;
-        pts.push([0.5 + Math.cos(a-Math.PI/2)*0.3, 0.35 + Math.sin(a-Math.PI/2)*0.3]);
+      // testa sferica
+      for (const p of sphereVolume(200, 0.24)) pts.push([p[0], p[1]+0.1, p[2]]);
+      // corpo che si allarga verso il basso
+      for (let i=0;i<300;i++){
+        const t = Math.random();
+        const r = 0.24 + t*0.05;
+        const a = Math.random()*TAU;
+        pts.push([
+          Math.cos(a)*r,
+          0.05 - t*0.45,
+          Math.sin(a)*r,
+        ]);
       }
-      for (let x=0.2;x<=0.8;x+=0.03){
-        pts.push([x, 0.65]);
-      }
-      // onde in basso
-      for (let x=0.2;x<=0.8;x+=0.04){
-        pts.push([x, 0.85 + Math.sin(x*Math.PI*6)*0.05]);
+      // bordo ondulato
+      for (let i=0;i<80;i++){
+        const a = (i/80)*TAU;
+        const wave = Math.sin(a*5)*0.04;
+        pts.push([Math.cos(a)*0.28, -0.4 + wave, Math.sin(a)*0.28]);
       }
       // occhi
-      pts.push([0.4,0.35]); pts.push([0.6,0.35]);
+      for (let i=0;i<10;i++){
+        pts.push([-0.08, 0.12, 0.22]);
+        pts.push([0.08, 0.12, 0.22]);
+      }
       return pts;
     }
   },
   window: {
-    w: 0.18, h: 0.22, color: "#9DBBD1",
-    points: () => {
+    scale: [0.2, 0.24, 0.04],
+    color: "#9DBBD1",
+    build: () => {
       const pts = [];
-      for (let y=0.1;y<=0.9;y+=0.03){
-        pts.push([0.15,y]); pts.push([0.85,y]); pts.push([0.5,y]);
-      }
-      for (let x=0.15;x<=0.85;x+=0.04){
-        pts.push([x,0.1]); pts.push([x,0.9]); pts.push([x,0.5]);
+      for (const p of boxSurface(200, 0.7, 0.9, 0.12)) pts.push(p);
+      // crociera
+      for (let t=0;t<=1;t+=0.02){
+        pts.push([0, -0.45 + t*0.9, 0.08]);
+        pts.push([-0.35 + t*0.7, 0, 0.08]);
       }
       return pts;
     }
   },
-  circle: {
-    w: 0.15, h: 0.15, color: "#E8A67B",
-    points: () => {
+  planet: {
+    scale: [0.3, 0.3, 0.3],
+    color: "#C9C6E4",
+    build: () => {
       const pts = [];
-      for (let i=0;i<40;i++){
-        const a = (i/40)*Math.PI*2;
-        pts.push([0.5 + Math.cos(a)*0.4, 0.5 + Math.sin(a)*0.4]);
+      for (const p of sphereSurface(450, 0.5, 0.03)) pts.push(p);
+      // anello
+      for (let i=0;i<200;i++){
+        const a = Math.random()*TAU;
+        const r = 0.55 + Math.random()*0.2;
+        pts.push([Math.cos(a)*r, rand(-0.02,0.02), Math.sin(a)*r]);
       }
       return pts;
     }
   },
 };
 
-/* sinonimi e traduzioni */
 const SYNONYMS = {
-  // moon
   moon:"moon", luna:"moon",
-  // sun
   sun:"sun", sole:"sun",
-  // star
   star:"star", stars:"star", stella:"star", stelle:"star",
-  // tree
   tree:"tree", trees:"tree", albero:"tree", alberi:"tree", bosco:"tree", forest:"tree",
-  // house
   house:"house", home:"house", casa:"house",
-  // bird
   bird:"bird", birds:"bird", uccello:"bird", uccelli:"bird",
-  // cloud
   cloud:"cloud", clouds:"cloud", nuvola:"cloud", nuvole:"cloud",
-  // fish
   fish:"fish", pesce:"fish", pesci:"fish",
-  // sea
   sea:"sea", ocean:"sea", mare:"sea", oceano:"sea", waves:"sea", onde:"sea",
-  // mountain
   mountain:"mountain", mountains:"mountain", montagna:"mountain", montagne:"mountain",
-  // fire
   fire:"fire", flame:"fire", fuoco:"fire", fiamma:"fire",
-  // eye
   eye:"eye", eyes:"eye", occhio:"eye", occhi:"eye",
-  // heart
   heart:"heart", love:"heart", cuore:"heart", amore:"heart",
-  // flower
-  flower:"flower", flowers:"flower", fiore:"flower", fiori:"flower", rose:"flower", rosa:"flower",
-  // hand
+  flower:"flower", flowers:"flower", fiore:"flower", fiori:"flower",
   hand:"hand", hands:"hand", mano:"hand", mani:"hand",
-  // key
-  key:"key", chiave:"key",
-  // boat
   boat:"boat", ship:"boat", barca:"boat", nave:"boat",
-  // door
   door:"door", porta:"door",
-  // cat
   cat:"cat", gatto:"cat", gatti:"cat",
-  // dog
   dog:"dog", cane:"dog", cani:"dog",
-  // rain
   rain:"rain", pioggia:"rain",
-  // wind
-  wind:"wind", vento:"wind", breeze:"wind",
-  // ghost
-  ghost:"ghost", spirit:"ghost", fantasma:"ghost", spirito:"ghost", ghosts:"ghost",
-  // window
+  ghost:"ghost", spirit:"ghost", fantasma:"ghost", spirito:"ghost",
   window:"window", finestra:"window",
+  planet:"planet", pianeta:"planet",
 };
 
-/* ---------- DOTS (entità nel canvas) ---------- */
-const dots = [];        // tutti i puntini attivi
-const elements = [];    // gruppi: un gruppo = una parola materializzata
-let dotIdSeq = 0;
+/* ---------- SCENA: oggetti in mondo 3D ---------- */
+
+const objects = []; // { id, shape, wx, wy, wz, pts:[[x,y,z]..], rotY, rotSpeed, scale, color, born, alpha }
+let objIdSeq = 0;
 
 function hexWithAlpha(hex, a){
   const h = hex.replace("#","");
@@ -798,76 +820,61 @@ function hexWithAlpha(hex, a){
   return `rgba(${r},${g},${b},${a})`;
 }
 
-/* piazza una forma sul canvas in una posizione trovata */
-function materializeShape(shapeName){
-  const def = SHAPES[shapeName];
-  if (!def) return;
-  const pts = def.points();
-
-  // trova posizione che non si sovrapponga troppo (semplice random con tentativi)
-  const marginX = 0.08, marginY = 0.18; // evita bordi
-  const topBand = 0.25; // evita titolo
-  const bottomBand = 0.82; // evita input
-  const shapeW = def.w * W;
-  const shapeH = def.h * H;
-
-  let cx, cy;
+/* trova una posizione nel mondo 3D che non si sovrapponga */
+function findSpotFor(shape){
+  const def = SHAPES[shape];
+  const sW = def.scale[0], sH = def.scale[1];
+  // spazio mondo: x in [-0.8,0.8], y in [-0.35,0.45] (per non invadere titolo/input), z in [-0.4,0.4]
+  let wx, wy, wz;
   let tries = 0;
   while (true){
     tries++;
-    cx = marginX*W + Math.random()*(W - 2*marginX*W - shapeW) + shapeW/2;
-    cy = topBand*H + Math.random()*(bottomBand*H - topBand*H - shapeH) + shapeH/2;
-    // controlla distanza dagli elementi esistenti
+    wx = rand(-0.7, 0.7);
+    wy = rand(-0.25, 0.35);
+    wz = rand(-0.35, 0.35);
     let ok = true;
-    for (const el of elements){
-      const d = Math.hypot(el.cx - cx, el.cy - cy);
-      const minD = (shapeW + el.w) * 0.5;
+    for (const o of objects){
+      const dx = o.wx - wx, dy = o.wy - wy, dz = o.wz - wz;
+      const d = Math.sqrt(dx*dx + dy*dy + dz*dz);
+      const minD = (sW + o.scale[0]) * 0.6 + 0.15;
       if (d < minD){ ok = false; break; }
     }
     if (ok || tries > 30) break;
   }
-
-  const group = {
-    id: dotIdSeq++,
-    shape: shapeName,
-    cx, cy, w: shapeW, h: shapeH,
-    born: performance.now(),
-    dots: []
-  };
-
-  // crea i dots con partenza random
-  for (const [nx, ny] of pts){
-    const tx = cx + (nx - 0.5) * shapeW;
-    const ty = cy + (ny - 0.5) * shapeH;
-    dots.push({
-      group: group.id,
-      // parte random, converge al target
-      x: cx + (Math.random()-0.5)*W*0.4,
-      y: cy + (Math.random()-0.5)*H*0.4,
-      tx, ty,
-      vx: 0, vy: 0,
-      color: def.color,
-      phase: Math.random()*Math.PI*2,
-      life: 0,
-      alpha: 0,
-    });
-  }
-  elements.push(group);
-
-  // UI: mostra parola riconosciuta
-  flashRecognized(shapeName);
+  return [wx, wy, wz];
 }
 
-function removeShape(shapeName){
-  // trova l'ultimo gruppo di questo shape e rimuovilo
-  for (let i=elements.length-1;i>=0;i--){
-    if (elements[i].shape === shapeName){
-      const gid = elements[i].id;
-      // rimuovi dots
-      for (let j=dots.length-1;j>=0;j--){
-        if (dots[j].group === gid) dots.splice(j,1);
-      }
-      elements.splice(i,1);
+function materializeShape(shape){
+  const def = SHAPES[shape];
+  if (!def) return;
+  const pts = def.build();
+  const [wx, wy, wz] = findSpotFor(shape);
+
+  const obj = {
+    id: objIdSeq++,
+    shape,
+    wx, wy, wz,
+    pts,
+    scale: def.scale.slice(),
+    color: def.color,
+    rotY: rand(0, TAU),
+    rotX: rand(-0.15, 0.15),
+    rotSpeed: rand(0.002, 0.006) * (Math.random()<.5?-1:1),
+    born: performance.now(),
+    alpha: 0,
+    // ogni punto ha un offset di "convergenza" iniziale
+    offsets: pts.map(() => [rand(-0.6,0.6), rand(-0.6,0.6), rand(-0.6,0.6)]),
+    convergence: 0, // va da 0 a 1
+  };
+  objects.push(obj);
+  flashRecognized(shape);
+}
+
+function removeShape(shape){
+  for (let i=objects.length-1;i>=0;i--){
+    if (objects[i].shape === shape){
+      objects[i].dying = true;
+      objects[i].deathStart = performance.now();
       return true;
     }
   }
@@ -875,49 +882,109 @@ function removeShape(shapeName){
 }
 
 function clearAll(){
-  dots.length = 0;
-  elements.length = 0;
+  for (const o of objects) { o.dying = true; o.deathStart = performance.now(); }
   document.getElementById("recognized").innerHTML = "";
+  recognizedHistory.length = 0;
+}
+
+/* ---------- PROIEZIONE 3D -> 2D ---------- */
+/* telecamera semplice: posta a distanza D sull'asse Z positivo,
+   guarda l'origine. FOV fisso. */
+const CAM_Z = 1.6;
+const FOV = 1.3;
+
+function project(x, y, z){
+  // z del mondo negativa = lontano dalla telecamera
+  const zCam = CAM_Z - z; // distanza dalla camera
+  if (zCam <= 0.05) return null;
+  const f = FOV / zCam;
+  // mappa coord mondo (-1..1) allo schermo
+  const sx = W/2 + x * f * Math.min(W,H) * 0.5;
+  const sy = H/2 - y * f * Math.min(W,H) * 0.5;
+  return [sx, sy, zCam];
+}
+
+function rotateY(p, a){
+  const c = Math.cos(a), s = Math.sin(a);
+  return [p[0]*c + p[2]*s, p[1], -p[0]*s + p[2]*c];
+}
+function rotateX(p, a){
+  const c = Math.cos(a), s = Math.sin(a);
+  return [p[0], p[1]*c - p[2]*s, p[1]*s + p[2]*c];
 }
 
 /* ---------- LOOP ---------- */
-function drawFrame(){
+function frame(){
   ctx.clearRect(0,0,W,H);
 
   const now = performance.now();
-  for (const d of dots){
-    // fisica di convergenza morbida
-    const dx = d.tx - d.x;
-    const dy = d.ty - d.y;
-    d.vx = d.vx*0.88 + dx*0.018;
-    d.vy = d.vy*0.88 + dy*0.018;
-    d.x += d.vx;
-    d.y += d.vy;
+  // raccogli tutti i puntini da disegnare ordinati per profondità
+  const renderBuf = [];
 
-    // piccola oscillazione quando a riposo
-    d.phase += 0.018;
-    const restX = Math.sin(d.phase)*0.6;
-    const restY = Math.cos(d.phase*0.8)*0.5;
+  for (let oi=objects.length-1;oi>=0;oi--){
+    const o = objects[oi];
+    // alpha in
+    if (!o.dying){
+      o.alpha = Math.min(1, o.alpha + 0.02);
+      o.convergence = Math.min(1, o.convergence + 0.025);
+    } else {
+      // fade out e rimuovi
+      o.alpha = Math.max(0, o.alpha - 0.04);
+      if (o.alpha <= 0){
+        objects.splice(oi, 1);
+        continue;
+      }
+    }
+    o.rotY += o.rotSpeed;
 
-    // fade in
-    if (d.alpha < 0.7) d.alpha = Math.min(0.7, d.alpha + 0.02);
+    for (let i=0;i<o.pts.length;i++){
+      const p = o.pts[i];
+      const off = o.offsets[i];
+      const c = o.convergence;
+      // interpolazione offset -> target
+      let lx = p[0]*o.scale[0] + off[0]*(1-c);
+      let ly = p[1]*o.scale[1] + off[1]*(1-c);
+      let lz = p[2]*o.scale[2] + off[2]*(1-c);
+      // rotazione locale
+      let r = rotateY([lx,ly,lz], o.rotY);
+      r = rotateX(r, o.rotX);
+      // sposta nel mondo
+      const wx = r[0] + o.wx;
+      const wy = r[1] + o.wy;
+      const wz = r[2] + o.wz;
+      const proj = project(wx, wy, wz);
+      if (!proj) continue;
+      renderBuf.push({
+        sx: proj[0], sy: proj[1], zCam: proj[2],
+        color: o.color, alpha: o.alpha,
+      });
+    }
+  }
 
-    // draw
-    ctx.fillStyle = hexWithAlpha(d.color, d.alpha);
+  // ordina per profondità: far first
+  renderBuf.sort((a,b) => b.zCam - a.zCam);
+
+  for (const r of renderBuf){
+    // size e alpha per depth
+    const depthFactor = 1.5 / r.zCam; // più vicino = più grande
+    const size = Math.max(0.5, Math.min(2.8, depthFactor * 1.2));
+    // alpha più forte davanti, più debole dietro
+    const depthAlpha = Math.max(0.15, Math.min(0.85, depthFactor * 0.45));
+    ctx.fillStyle = hexWithAlpha(r.color, depthAlpha * r.alpha);
     ctx.beginPath();
-    ctx.arc(d.x + restX, d.y + restY, 1.4, 0, Math.PI*2);
+    ctx.arc(r.sx, r.sy, size, 0, TAU);
     ctx.fill();
   }
 
-  requestAnimationFrame(drawFrame);
+  requestAnimationFrame(frame);
 }
-requestAnimationFrame(drawFrame);
+requestAnimationFrame(frame);
 
 /* ---------- INPUT ---------- */
 const input = document.getElementById("dream");
 const counter = document.getElementById("counter");
 const recognizedBox = document.getElementById("recognized");
-let currentShapes = new Set(); // shapes attualmente visualizzate
+let currentShapes = new Set();
 
 function parse(text){
   const words = text.toLowerCase().replace(/[^a-zà-ù\s]/gi, "").split(/\s+/).filter(Boolean);
@@ -937,15 +1004,12 @@ function updateFromInput(){
   if (len >= 80) counter.classList.add("full");
 
   const newShapes = parse(text);
-
-  // aggiungi le nuove
   for (const s of newShapes){
     if (!currentShapes.has(s)){
       materializeShape(s);
       currentShapes.add(s);
     }
   }
-  // rimuovi quelle sparite (parola cancellata)
   for (const s of [...currentShapes]){
     if (!newShapes.has(s)){
       removeShape(s);
@@ -953,7 +1017,6 @@ function updateFromInput(){
     }
   }
 }
-
 input.addEventListener("input", updateFromInput);
 
 document.getElementById("reset").addEventListener("click", ()=>{
@@ -965,7 +1028,6 @@ document.getElementById("reset").addEventListener("click", ()=>{
   input.focus();
 });
 
-/* ---------- LISTA PAROLE RICONOSCIUTE ---------- */
 const recognizedHistory = [];
 function flashRecognized(shapeName){
   const row = document.createElement("span");
@@ -974,12 +1036,10 @@ function flashRecognized(shapeName){
   recognizedBox.appendChild(row);
   requestAnimationFrame(()=>row.classList.add("show"));
   recognizedHistory.push(row);
-  // mantieni solo ultimi 5
   while (recognizedHistory.length > 5){
     const old = recognizedHistory.shift();
     old.remove();
   }
-  // fade quelli vecchi
   for (let i=0;i<recognizedHistory.length;i++){
     if (i < recognizedHistory.length - 1) recognizedHistory[i].classList.add("fade");
     else recognizedHistory[i].classList.remove("fade");
